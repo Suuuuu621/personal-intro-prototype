@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>个人介绍原型</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      background: linear-gradient(135deg, #eef4ff, #f9fbff);
+      color: #1f2a44;
+      min-height: 100vh;
+    }
+    .app {
+      width: 390px;
+      min-height: 844px;
+      margin: 18px auto;
+      background: #fff;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 18px 45px rgba(32, 60, 120, 0.18);
+      position: relative;
+    }
+    .screen {
+      display: none;
+      min-height: 844px;
+      padding: 24px 20px 90px;
+      position: relative;
+      animation: fadeIn .35s ease;
+    }
+    .screen.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero {
+      background: linear-gradient(135deg, #4f7cff, #7d59ff);
+      color: white;
+      padding: 28px 20px 26px;
+      border-radius: 0 0 26px 26px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.12);
+      position: absolute;
+      right: -30px;
+      top: -30px;
+    }
+    .avatar {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,.5);
+      object-fit: cover;
+      background: #d8e2ff;
+      display: block;
+      margin-bottom: 14px;
+    }
+    .subtitle { opacity: .9; margin-top: 8px; font-size: 14px; line-height: 1.6; }
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 22px 0 12px;
+    }
+    .card {
+      background: #f7faff;
+      border: 1px solid #e5eeff;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 8px 20px rgba(100, 131, 193, .08);
+    }
+    .tag-wrap { display: flex; flex-wrap: wrap; gap: 10px; }
+    .tag {
+      background: #eef3ff;
+      color: #3856c8;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+    .timeline-item {
+      border-left: 3px solid #7d59ff;
+      padding-left: 12px;
+      margin-bottom: 16px;
+    }
+    .timeline-item small { color: #6d7792; }
+    .gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .gallery img, .video-box {
+      width: 100%;
+      border-radius: 16px;
+      height: 138px;
+      object-fit: cover;
+      background: #eaf0ff;
+    }
+    .video-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #445;
+      font-weight: 600;
+      text-align: center;
+      padding: 14px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 16px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #4f7cff, #7d59ff);
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 8px 18px rgba(90,110,255,.28);
+    }
+    .btn.secondary {
+      background: #edf2ff;
+      color: #4560d2;
+      box-shadow: none;
+    }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .nav {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 72px;
+      background: rgba(255,255,255,.95);
+      border-top: 1px solid #ebf0fb;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      backdrop-filter: blur(8px);
+    }
+    .nav button {
+      background: none; border: none; color: #6d7792;
+      font-size: 13px; cursor: pointer; padding: 8px 10px; border-radius: 12px;
+    }
+    .nav button.active {
+      background: #eef3ff;
+      color: #4560d2;
+      font-weight: 700;
+    }
+    .music-box {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 10px;
+    }
+    .pulse {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #7d59ff; position: relative; flex: 0 0 auto;
+      animation: pulse 1.6s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(125,89,255,.45); }
+      70% { box-shadow: 0 0 0 16px rgba(125,89,255,0); }
+      100% { box-shadow: 0 0 0 0 rgba(125,89,255,0); }
+    }
+    ul { padding-left: 18px; line-height: 1.8; }
+    .footer-note {
+      color: #7b8398; font-size: 12px; margin-top: 14px; line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- 页面1：首页 -->
+    <section class="screen active" id="home">
+    <div class="hero">
+<img class="avatar" src="avatar.jpg" alt="头像">
+        <h1>你好，我是董梓苏</h1>
+        <p class="subtitle">计算机专业学生 / 着重研究医疗影像分类ai。这个原型界面用于展示我的基本信息、学习经历与个人作品。</p>
+      </div>
+
+      <div class="section-title">基础信息</div>
+      <div class="card">
+        <ul>
+          <li>学校 / 专业：计算机科学与技术</li>
+          <li>方向兴趣：AI、医学影像分类等方向</li>
+          <li>性格标签：喜欢钻研问题</li>
+        </ul>
+      </div>
+
+      <div class="section-title">我的关键词</div>
+      <div class="tag-wrap">
+        <span class="tag">Python</span>
+        <span class="tag">医疗影像</span>
+        <span class="tag">深度学习等</span>
+        <span class="tag">UI/UX</span>
+      </div>
+
+      <div class="section-title">交互入口</div>
+      <div class="actions">
+        <button class="btn" onclick="showScreen('story')">查看我的经历</button>
+        <button class="btn secondary" onclick="showScreen('media')">查看作品与媒体</button>
+      </div>
+
+
+    </section>
+
+    <!-- 页面2：经历页 -->
+    <section class="screen" id="story">
+      <div class="section-title">学习经历</div>
+      <div class="timeline-item">
+        <h3>大学阶段</h3>
+        <small>2023 - 至今</small>
+        <p>系统学习了数据结构、操作系统、计算机网络、数据库、编译原理等核心课程，并开始接触深度学习与医学影像方向。</p>
+      </div>
+      <div class="timeline-item">
+        <h3>项目实践</h3>
+        <small>持续进行中</small>
+        <p>数据结构可视化、模型阅读整理等内容，逐步形成“能讲清 + 能做出”的能力。</p>
+      </div>
+      <div class="timeline-item">
+        <h3>未来目标</h3>
+        <small>Next Step</small>
+        <p>希望继续深入 AI + 医疗应用方向，同时提升产品思维、交互表达与项目整合能力。</p>
+      </div>
+
+      <div class="section-title">技能展示</div>
+      <div class="card">
+        <ul>
+          <li>编程语言：Python / C / SQL </li>
+          <li>开发工具：PyTorch/ VS Code / Git </li>
+          <li>设计表达：PPT、流程图、原型图、界面梳理</li>
+        </ul>
+      </div>
+
+  
+      <div class="actions">
+        <button class="btn secondary" onclick="showScreen('home')">返回首页</button>
+        <button class="btn" onclick="showScreen('media')">下一页：作品展示</button>
+      </div>
+    </section>
+
+    <!-- 页面3：作品/媒体页 -->
+    <section class="screen" id="media">
+      <div class="section-title">作品与媒体展示</div>
+
+   <div class="gallery">
+  <img src="git1.png" alt="作品图1">
+
+
+</div>
+
+      <div class="section-title">作品说明</div>
+      <div class="card">
+        <p>本页面用于展示个人项目、比赛截图、课程作业、演讲片段等内容。</p>
+      </div>
+
+      <div class="section-title">联系方式</div>
+      <div class="card">
+        <ul>
+          <li>邮箱：dongizusu@gmail.com</li>
+          <li>GitHub：github.com/Zisu Dong</li>
+          <li>个人说明：欢迎交流学习、设计和技术相关内容</li>
+        </ul>
+      </div>
+
+      <div class="actions">
+        <button class="btn secondary" onclick="showScreen('story')">上一页</button>
+        <button class="btn" onclick="showScreen('home')">回到首页</button>
+      </div>
+
+    </section>
+
+    <div class="nav">
+      <button class="active" data-target="home" onclick="showScreen('home')">首页</button>
+      <button data-target="story" onclick="showScreen('story')">经历</button>
+      <button data-target="media" onclick="showScreen('media')">作品</button>
+    </div>
+  </div>
+
+  <script>
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+
+      document.querySelectorAll('.nav button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.target === id);
+      });
+    }
+  </script>
+</body>
+</html>
